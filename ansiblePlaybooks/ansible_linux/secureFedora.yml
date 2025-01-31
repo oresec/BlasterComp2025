@@ -10,7 +10,7 @@
       user:
         name: "{{ item }}"
         state: absent
-      loop:
+      with_items:
         - abwise
         - administrator
         - brwake
