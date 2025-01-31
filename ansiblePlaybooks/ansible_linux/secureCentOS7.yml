@@ -9,6 +9,6 @@
         state: latest
 
     - name: Stop SSH
-      ansible.builtin.shell: "systemctl disable ssh.service && systemctl stop ssh.service"
-      
+      ansible.builtin.shell: "systemctl disable sshd && systemctl stop sshd"
+
 
