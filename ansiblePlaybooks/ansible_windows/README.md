@@ -1,7 +1,8 @@
-### Ansible Instructions for Windows
+# Ansible Instructions for Windows
 
-# Install and setup ansible stuff so it works
+### Install and setup ansible stuff so it works
 
+First, do the following.
 ```powershell
 # Step 1
 pip install ansible
