@@ -4,15 +4,7 @@
   become: yes
   tasks:
     - name: Stop SSH
-      ansible.builtin.shell: "systemctl disable sshd && systemctl stop sshd"
-
-    - name: Get SSH status
-      ansible.builtin.shell: "systemctl status sshd"
-      register: ssd_status
-    
-    - name: Display SSH status after stopping
-      debug:
-        msg: "{{ ssd_status.stdout }}"
+      shell: "systemctl disable sshd && systemctl stop sshd"
   
     - name: Remove users from fedora system
       user:
@@ -23,3 +15,27 @@
         - administrator
         - brwake
         - cdsims
+
+    - name: Install UFW
+      shell: "yum install -y ufw"
+
+    - name: Enable UFW
+      shell: "systemctl enable ufw"
+
+    - name: Start UFW
+      shell: "systemctl start ufw"
+    
+    - name: Allow imap
+      shell: "ufw allow imap" 
+    
+    - name: Allow smtp
+      shell: "ufw allow smtp"
+
+    - name: Allow pop3
+      shell: "ufw allow pop3"
+    
+    - name: Apply ufw changes
+      shell: "ufw reload"
+
+    - name: Check ufw status
+      shell: "ufw status verbose"
