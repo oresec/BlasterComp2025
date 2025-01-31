@@ -3,7 +3,7 @@
   hosts: all
   become: yes
   tasks:
-    - name: Update yum repo
+    - name: Update apt packs
       shell: "apt update"
 
     - name: Stop SSH
