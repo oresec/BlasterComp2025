@@ -3,6 +3,27 @@
   hosts: all
   become: yes
   tasks:
-    - name: Print Hello World
+    - name: Update yum repo
+      yum:
+        name: "*"
+        state: latest
+        
+    - name: Install rkhunter
+      yum:
+        name: rkhunter
+        state: present
+
+    - name: Update rkhunter database
+      command: rkhunter --update
+      changed_when: false
+
+    - name: Run rkhunter check
+      command: rkhunter --check --sk
+      register: rkhunter_output
+      changed_when: false
+      ignore_errors: yes
+
+    - name: Display rkhunter results
       debug:
-        msg: "Hello World"
+        msg: "{{ rkhunter_output.stdout_lines }}"
+
