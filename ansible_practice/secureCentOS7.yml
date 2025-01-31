@@ -7,7 +7,7 @@
       yum:
         name: "*"
         state: latest
-        
+
     - name: Install rkhunter
       yum:
         name: rkhunter
@@ -16,6 +16,7 @@
     - name: Update rkhunter database
       command: rkhunter --update
       changed_when: false
+      ignore_errors: yes
 
     - name: Run rkhunter check
       command: rkhunter --check --sk
