@@ -16,26 +16,17 @@
         - brwake
         - cdsims
 
-    - name: Install UFW
-      shell: "yum install -y ufw"
+    - name: Start firewalld
+      shell: "systemctl enable firewalld && systemctl start firewalld"
 
-    - name: Enable UFW
-      shell: "systemctl enable ufw"
-
-    - name: Start UFW
-      shell: "systemctl start ufw"
+    - name: Allow POP3 and POP3S
+      shell: "firewall-cmd --permanent --add-port=110/tcp && firewall-cmd --permanent --add-port=995/tcp"
     
-    - name: Allow imap
-      shell: "ufw allow imap" 
-    
-    - name: Allow smtp
-      shell: "ufw allow smtp"
+    - name: Allow IMAP
+      shell: "firewall-cmd --permanent --add-port=143/tcp"
 
-    - name: Allow pop3
-      shell: "ufw allow pop3"
-    
-    - name: Apply ufw changes
-      shell: "ufw reload"
+    - name: Allow SMTP
+      shell: "firewall-cmd --permanent --add-port=25/tcp"
 
-    - name: Check ufw status
-      shell: "ufw status verbose"
+    - name: Apply firewalld changes
+      shell: "firewall-cmd --reload"
