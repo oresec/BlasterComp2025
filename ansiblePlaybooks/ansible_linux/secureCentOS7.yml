@@ -11,4 +11,13 @@
     - name: Stop SSH
       ansible.builtin.shell: "systemctl disable sshd && systemctl stop sshd"
 
+    - name: Get SSH status
+      ansible.builtin.shell: "systemctl status sshd"
+      register: ssd_status
+    
+    - name: Display SSH status after stopping
+      debug:
+        msg: "{{ ssd_status.stdout }}"
+
+    
 
