@@ -2,7 +2,7 @@
 
 ### Install and setup ansible stuff so it works
 
-First, do the following.
+First, do the following in powershell.
 ```powershell
 # Step 1
 pip install ansible
