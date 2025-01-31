@@ -11,13 +11,19 @@
     - name: Stop SSH
       ansible.builtin.shell: "systemctl disable sshd && systemctl stop sshd"
 
-    - name: Get SSH status
-      ansible.builtin.shell: "systemctl status sshd"
-      register: ssd_status
+    - name: Start firewalld
+      shell: "systemctl enable firewalld && systemctl start firewalld"
+
+    - name: Allow 80
+      shell: "firewall-cmd --permanent --add-port=80/tcp"
     
-    - name: Display SSH status after stopping
-      debug:
-        msg: "{{ ssd_status.stdout }}"
+    - name: Deny SSH
+      shell: "firewall-cmd --permanent --remove-port=22/tcp"
+
+    - name: Apply firewalld changes
+      shell: "firewall-cmd --reload"
+
+    
 
     
 

@@ -28,5 +28,16 @@
     - name: Allow SMTP
       shell: "firewall-cmd --permanent --add-port=25/tcp"
 
+    - name: Allow mySQL
+      shell: "firewall-cmd --permanent --add-port=3306/tcp"
+    
+    - name: Deny HTTP
+      shell: "firewall-cmd --permanent --remove-port=80/tcp"
+    
+    - name: Deny SSH
+      shell: "firewall-cmd --permanent --remove-port=22/tcp"
+
     - name: Apply firewalld changes
       shell: "firewall-cmd --reload"
+    
+  
