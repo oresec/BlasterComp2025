@@ -20,7 +20,7 @@
       shell: "systemctl enable firewalld && systemctl start firewalld"
 
     - name: Allow POP3 and POP3S
-      shell: "firewall-cmd --permanent --add-port=110/tcp && firewall-cmd --permanent --add-port=995/tcp"
+      shell: "firewall-cmd --permanent --add-port=110/tcp"
     
     - name: Allow IMAP
       shell: "firewall-cmd --permanent --add-port=143/tcp"
