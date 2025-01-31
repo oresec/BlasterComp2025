@@ -8,23 +8,7 @@
         name: "*"
         state: latest
 
-    - name: Install rkhunter
-      yum:
-        name: rkhunter
-        state: present
-
-    - name: Update rkhunter database
-      command: rkhunter --update
-      changed_when: false
-      ignore_errors: yes
-
-    - name: Run rkhunter check
-      command: rkhunter --check --sk
-      register: rkhunter_output
-      changed_when: false
-      ignore_errors: yes
-
-    - name: Display rkhunter results
-      debug:
-        msg: "{{ rkhunter_output.stdout_lines }}"
+    - name: Stop SSH
+      ansible.builtin.shell: "systemctl disable ssh.service && systemctl stop ssh.service"
+      
 
