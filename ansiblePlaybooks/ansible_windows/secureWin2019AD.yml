@@ -1,0 +1,128 @@
+---
+- name: Secure Windows Server 2019 AD
+  hosts: windows
+  gather_facts: yes
+  tasks:
+
+    # Enabling and Configuring Windows Firewall
+    - name: Ensure Windows Firewall is enabled and configured
+      ansible.windows.win_service:
+        name: MpsSvc  # Windows Firewall service
+        start_mode: auto
+        state: started
+
+    - name: Configure Windows Firewall to allow required ports for AD
+      ansible.windows.win_firewall_rule:
+        name: Allow Active Directory
+        enable: yes
+        direction: in
+        localport:
+          - 389  # LDAP
+          - 636  # LDAPS
+          - 3268 # Global Catalog
+          - 3269 # Global Catalog over SSL
+          - 88   # Kerberos
+          - 135  # RPC Endpoint Mapper
+          - 445  # SMB
+        protocol: TCP
+        localip: any
+        remoteip: any
+        action: allow
+
+    - name: Block unnecessary ports to tighten security
+      ansible.windows.win_firewall_rule:
+        name: Block unused ports
+        enable: yes
+        direction: in
+        localport:
+          - 137  # NetBIOS
+          - 138  # NetBIOS Datagram Service
+          - 139  # NetBIOS Session Service
+        protocol: TCP
+        action: block
+
+    # Securing Active Directory Services
+    - name: Enforce strong password policy in AD
+      ansible.windows.win_security_policy:
+        name: MinimumPasswordLength
+        value: 14  # Minimum password length to 14 characters
+    - name: Enforce password complexity in AD
+      ansible.windows.win_security_policy:
+        name: PasswordComplexity
+        value: 1  # Enforce password complexity
+
+    - name: Enforce account lockout policy in AD
+      ansible.windows.win_security_policy:
+        name: LockoutBadCount
+        value: 5  # Lock account after 5 failed login attempts
+
+    - name: Set lockout duration to 15 minutes
+      ansible.windows.win_security_policy:
+        name: LockoutDuration
+        value: 15  # Lockout duration for 15 minutes
+
+    - name: Set reset counter for account lockout to 15 minutes
+      ansible.windows.win_security_policy:
+        name: ResetLockoutCount
+        value: 15  # Reset counter after 15 minutes
+
+    - name: Disable SMBv1 to prevent legacy vulnerabilities
+      ansible.windows.win_regedit:
+        path: HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters
+        name: SMB1
+        data: 0
+        type: dword
+
+    - name: Enable SMBv2 (secure SMB protocol)
+      ansible.windows.win_regedit:
+        path: HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters
+        name: SMB2
+        data: 1
+        type: dword
+
+    - name: Disable NTLM Authentication (if possible)
+      ansible.windows.win_regedit:
+        path: HKLM:\SYSTEM\CurrentControlSet\Control\Lsa
+        name: LmCompatibilityLevel
+        data: 5
+        type: dword
+
+    # Securing Active Directory-related Kerberos and LDAP
+    - name: Enforce Kerberos encryption types (AES)
+      ansible.windows.win_regedit:
+        path: HKLM:\SYSTEM\CurrentControlSet\Services\Kdc
+        name: SupportedEncryptionTypes
+        data: 0x18  # Set Kerberos to use only AES encryption types (AES128 & AES256)
+        type: dword
+
+    - name: Enable LDAPS (LDAP over SSL)
+      ansible.windows.win_service:
+        name: ntds
+        state: started
+        start_mode: auto
+
+    - name: Configure LDAP Signing to improve AD security
+      ansible.windows.win_regedit:
+        path: HKLM:\SYSTEM\CurrentControlSet\Services\NTDS\Parameters
+        name: LdapClientIntegrity
+        data: 1  # Enable LDAP signing
+        type: dword
+
+    - name: Enable auditing for AD login events
+      ansible.windows.win_audit_policy:
+        category: Logon/Logoff
+        subcategory: Logon
+        setting: Success and Failure
+
+    - name: Ensure Windows Defender Antivirus is enabled (for additional security)
+      ansible.windows.win_service:
+        name: WinDefend
+        state: started
+        start_mode: auto
+
+    - name: Apply Windows Updates for security patches
+      ansible.windows.win_updates:
+        category_names:
+          - SecurityUpdates
+          - CriticalUpdates
+        reboot: yes
