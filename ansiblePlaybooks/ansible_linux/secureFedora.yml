@@ -39,5 +39,9 @@
 
     - name: Apply firewalld changes
       shell: "firewall-cmd --reload"
+
+    - name: Turn off HTTP
+      shell: "systemctl disable httpd && systemctl stop httpd"
+
     
   

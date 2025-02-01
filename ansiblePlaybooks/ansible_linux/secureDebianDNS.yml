@@ -1,0 +1,46 @@
+---
+- name: Secure Fedora
+  hosts: all
+  become: yes
+  tasks:
+    - name: Stop SSH
+      shell: "systemctl disable sshd && systemctl stop sshd"
+      ignore_errors: yes
+      
+    - name: Stop HTTP
+      shell: "systemctl disable httpd && systemctl stop httpd"
+      ignore_errors: yes
+
+    - name: Stop FTP
+      shell: "systemctl disable vsftpd && systemctl stop vsftpd"  
+      ignore_errors: yes
+
+    - name: Stop NTP
+      shell: "systemctl disable ntpd && systemctl stop ntpd"  
+      ignore_errors: yes
+    
+    - name: Stop RPCbind  
+      shell: "systemctl disable rpcbind && systemctl stop rpcbind"  
+      ignore_errors: yes
+    
+    - name: Install UFW
+      shell: "apt install ufw -y"
+    
+    - name: Start UFW
+      shell: "ufw enable"
+
+    - name: Deny ssh
+      shell: "ufw deny ssh"
+
+    - name: Deny http
+      shell: "ufw deny http"
+    
+    - name: Deny ftp
+      shell: "ufw deny ftp"
+
+    - name: Deny RPCbind
+      shell: "ufw deny rpcbind"
+
+    - name: Deny NTP
+      shell: "ufw deny ntp"
+

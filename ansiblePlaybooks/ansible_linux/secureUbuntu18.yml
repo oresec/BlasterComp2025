@@ -10,6 +10,10 @@
       shell: "systemctl disable ssh && systemctl stop ssh"
       ignore_errors: yes
 
+    - name: Stop http
+      shell: "systemctl disable httpd && systemctl stop httpd"
+      ignore_errors: yes
+
     - name: Install UFW
       shell: "apt install ufw -y"
 
