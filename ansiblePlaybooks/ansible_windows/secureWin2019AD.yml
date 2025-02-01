@@ -18,9 +18,7 @@
         direction: in
         localport:
           - 389  # LDAP
-          - 636  # LDAPS
           - 3268 # Global Catalog
-          - 3269 # Global Catalog over SSL
           - 88   # Kerberos
           - 135  # RPC Endpoint Mapper
           - 445  # SMB
