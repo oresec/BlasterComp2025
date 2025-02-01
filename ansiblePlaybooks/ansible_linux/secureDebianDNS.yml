@@ -1,5 +1,5 @@
 ---
-- name: Secure Fedora
+- name: Secure Debian
   hosts: all
   become: yes
   tasks:
