@@ -6,7 +6,7 @@
     - name: Stop SSH
       shell: "systemctl disable sshd && systemctl stop sshd"
       ignore_errors: yes
-      
+
     - name: Stop HTTP
       shell: "systemctl disable httpd && systemctl stop httpd"
       ignore_errors: yes
@@ -43,4 +43,8 @@
 
     - name: Deny NTP
       shell: "ufw deny ntp"
+    
+    - name: Allow DNS
+      shell: "ufw allow dns"
+      
 
