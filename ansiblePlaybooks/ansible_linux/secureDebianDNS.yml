@@ -8,15 +8,15 @@
       ignore_errors: yes
 
     - name: Stop HTTP
-      shell: "systemctl disable apache2 && systemctl stop apache2"
+      shell: "systemctl disable httpd && systemctl stop httpd"
       ignore_errors: yes
 
     - name: Stop FTP
-      shell: "systemctl disable proftpd && systemctl stop proftpd"  
+      shell: "systemctl disable vsftpd && systemctl stop vsftpd"  
       ignore_errors: yes
 
     - name: Stop NTP
-      shell: "systemctl disable ntp && systemctl stop ntp"  
+      shell: "systemctl disable ntpd && systemctl stop ntpd"  
       ignore_errors: yes
     
     - name: Stop RPCbind  

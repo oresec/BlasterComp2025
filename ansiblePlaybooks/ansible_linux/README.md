@@ -1,11 +1,7 @@
 # Ansible scripts help with automation of hardening tasks
 
 ### Run the following for each machine playbook
-1. Install ansible
-   ```bash
-      sudo apt install ansible -y #Ubuntu/Debian
-      sudo yum install ansible -y #Fedora/CentOS7
-       
+
 ```bash
     ansible-playbook -i inventory.ini playbookName.yml > logs/ansible.playbookName.log
 ```

@@ -5,11 +5,21 @@
   tasks:
     - name: Stop SSH
       shell: "systemctl disable sshd && systemctl stop sshd"
+  
+    - name: Remove users from fedora system
+      user:
+        name: "{{ item }}"
+        state: absent
+      with_items:
+        - abwise
+        - administrator
+        - brwake
+        - cdsims
 
     - name: Start firewalld
       shell: "systemctl enable firewalld && systemctl start firewalld"
 
-    - name: Allow POP3
+    - name: Allow POP3 and POP3S
       shell: "firewall-cmd --permanent --add-port=110/tcp"
     
     - name: Allow IMAP
